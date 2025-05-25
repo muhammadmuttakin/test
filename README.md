@@ -113,9 +113,20 @@ Untuk meningkatkan keterbacaan, beberapa nama kolom diubah ke Bahasa Indonesia, 
 - `age` menjadi `usia`
 - `sex` menjadi `jenis_kelamin`
 - `cp` menjadi `tipe_nyeri_dada`
-- dan seterusnya, sebagaimana ditunjukkan pada Tabel 2.
+- `trestbps` menjadi `tekanan_darah_istirahat`
+- `chol` menjadi `kolesterol`
+- `fbs` menjadi `gula_darah_puasa`
+- `restecg` menjadi `hasil_ekg_istirahat`
+- `thalach` menjadi `denyut_jantung_maks`
+- `exang` menjadi `angina_terinduksi_olahraga`
+- `oldpeak` menjadi `depresi_st`
+- `slope` menjadi `kemiringan_st`
+- `ca` menjadi `jumlah_pembuluh_berwarna`
+- `thal` menjadi `jenis_thalasemia`
 
 ### Analisis Korelasi
+![image](https://github.com/user-attachments/assets/c00a61d9-fd99-4366-a7b5-5b26ca83999b)
+
 Dilakukan analisis korelasi antara fitur dan variabel target. Hasilnya:
 
 | Fitur                       | Korelasi dengan Target |
