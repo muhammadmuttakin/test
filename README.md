@@ -308,14 +308,20 @@ Pada proyek klasifikasi ini, digunakan beberapa metrik evaluasi untuk mengukur k
   \]
 
 ### Hasil Evaluasi Model
-Confusion Matrix Decision Tree
-![image](https://github.com/user-attachments/assets/4a2f26f0-4867-4161-9ba0-43f946078425)
-Confusion Matrix Random Forest
-![image](https://github.com/user-attachments/assets/b3f9d527-cbe9-4438-b719-970eccfb7eee)
-Confusion Matrix KNN
-![image](https://github.com/user-attachments/assets/66ccfe62-3f9a-4cfa-8472-466dd85cb843)
-Confusion Matrix SVM
-![image](https://github.com/user-attachments/assets/7b2f29d9-fce0-4605-ad88-3e31a0f3d1bd)
+## Confusion Matrix
+
+### Confusion Matrix Decision Tree  
+![Confusion Matrix Decision Tree](https://github.com/user-attachments/assets/4a2f26f0-4867-4161-9ba0-43f946078425)
+
+### Confusion Matrix Random Forest  
+![Confusion Matrix Random Forest](https://github.com/user-attachments/assets/b3f9d527-cbe9-4438-b719-970eccfb7eee)
+
+### Confusion Matrix KNN  
+![Confusion Matrix KNN](https://github.com/user-attachments/assets/66ccfe62-3f9a-4cfa-8472-466dd85cb843)
+
+### Confusion Matrix SVM  
+![Confusion Matrix SVM](https://github.com/user-attachments/assets/7b2f29d9-fce0-4605-ad88-3e31a0f3d1bd)
+
 
 Empat algoritma telah digunakan untuk menyelesaikan tugas klasifikasi penyakit jantung:
 
