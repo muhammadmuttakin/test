@@ -206,14 +206,6 @@ Contoh lima data teratas (4 pertama + 1 terakhir) dari dataset hasil preprocessi
 
 ---
 
-## Kesimpulan
-
-Tahapan data preparation yang sistematis sangat krusial untuk memastikan bahwa dataset:
-- Bersih dan dalam format yang sesuai untuk algoritma pembelajaran mesin
-- Mengandung fitur yang informatif dan terukur secara seimbang
-- Siap digunakan untuk pelatihan model klasifikasi penyakit jantung secara efektif dan efisien.
-
-
 ## Modeling
 
 Pada tahap ini, dilakukan pemodelan menggunakan empat algoritma machine learning yang berbeda. Tujuan dari penggunaan beberapa model adalah untuk membandingkan performa masing-masing dan memilih model terbaik untuk klasifikasi penyakit jantung.
@@ -316,6 +308,14 @@ Pada proyek klasifikasi ini, digunakan beberapa metrik evaluasi untuk mengukur k
   \]
 
 ### Hasil Evaluasi Model
+Confusion Matrix Decision Tree
+![image](https://github.com/user-attachments/assets/4a2f26f0-4867-4161-9ba0-43f946078425)
+Confusion Matrix Random Forest
+![image](https://github.com/user-attachments/assets/b3f9d527-cbe9-4438-b719-970eccfb7eee)
+Confusion Matrix KNN
+![image](https://github.com/user-attachments/assets/66ccfe62-3f9a-4cfa-8472-466dd85cb843)
+Confusion Matrix SVM
+![image](https://github.com/user-attachments/assets/7b2f29d9-fce0-4605-ad88-3e31a0f3d1bd)
 
 Empat algoritma telah digunakan untuk menyelesaikan tugas klasifikasi penyakit jantung:
 
