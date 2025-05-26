@@ -205,14 +205,6 @@ Contoh lima data teratas (4 pertama + 1 terakhir) dari dataset hasil preprocessi
 
 ---
 
-## Modeling
-
-Pada tahap ini, dilakukan pemodelan menggunakan empat algoritma machine learning yang berbeda. Tujuan dari penggunaan beberapa model adalah untuk membandingkan performa masing-masing dan memilih model terbaik untuk klasifikasi penyakit jantung.
-
-### Model yang Digunakan
-
-Empat algoritma supervised learning yang digunakan adalah:
-
 # Modeling
 
 ## Model 1: Decision Tree
