@@ -67,7 +67,6 @@ Berdasarkan temuan-temuan tersebut, penelitian ini menggunakan empat algoritma k
    Melakukan **data preprocessing** termasuk normalisasi dan transformasi variabel kategorikal menjadi numerik, serta pemilihan fitur berdasarkan korelasi tertinggi agar model lebih fokus pada fitur yang relevan terhadap penyakit jantung.
 
 
-## Data Understanding
 # Data Understanding
 
 ## Sumber Dataset
@@ -214,46 +213,102 @@ Pada tahap ini, dilakukan pemodelan menggunakan empat algoritma machine learning
 
 Empat algoritma supervised learning yang digunakan adalah:
 
-1. **Decision Tree**
-   - Implementasi: `DecisionTreeClassifier()`
-   - Merupakan model berbasis pohon keputusan yang membagi data ke dalam cabang berdasarkan fitur yang paling berpengaruh.
-   - **Kelebihan**:
-     - Mudah diinterpretasikan.
-     - Dapat menangani data kategorikal dan numerik.
-     - Tidak memerlukan normalisasi data.
-   - **Kekurangan**:
-     - Rentan terhadap overfitting, terutama pada data dengan banyak noise.
-     - Kurang stabil terhadap perubahan kecil pada data.
+# Modeling
 
-2. **Random Forest**
-   - Implementasi: `RandomForestClassifier()`
-   - Merupakan ensemble dari banyak decision tree, yang digabung menggunakan metode voting untuk meningkatkan akurasi dan mengurangi overfitting.
-   - **Kelebihan**:
-     - Lebih akurat dan stabil dibandingkan decision tree tunggal.
-     - Dapat menangani missing value dan data tidak linear.
-   - **Kekurangan**:
-     - Lebih kompleks dan membutuhkan lebih banyak sumber daya komputasi.
-     - Sulit diinterpretasikan secara individual.
+## Model 1: Decision Tree
 
-3. **K-Nearest Neighbors (KNN)**
-   - Implementasi: `KNeighborsClassifier()`
-   - Model ini mengklasifikasikan data baru berdasarkan kemiripan (jarak) ke data-data terdekat (tetangga).
-   - **Kelebihan**:
-     - Sederhana dan efektif untuk dataset kecil.
-     - Tidak ada asumsi distribusi data.
-   - **Kekurangan**:
-     - Sensitif terhadap fitur yang tidak dinormalisasi (itulah mengapa dilakukan **StandardScaler** sebelumnya).
-     - Kurang efisien untuk dataset besar karena proses pencarian tetangga.
+### Penjelasan cara kerja algoritma
+Decision Tree merupakan algoritma klasifikasi yang membagi data ke dalam beberapa cabang berdasarkan fitur yang paling berpengaruh. Setiap node dalam pohon mewakili keputusan berdasarkan satu fitur, dan proses ini berlanjut hingga mencapai daun yang merepresentasikan kelas akhir. Algoritma ini menggunakan metrik seperti *Gini Impurity* atau *Entropy* untuk menentukan kualitas pemisahan.
 
-4. **Support Vector Machine (SVM)**
-   - Implementasi: `SVC()`
-   - Mencari hyperplane optimal yang memisahkan dua kelas dengan margin maksimal.
-   - **Kelebihan**:
-     - Efektif dalam ruang dimensi tinggi.
-     - Bekerja baik untuk data yang tidak linear dengan kernel trick.
-   - **Kekurangan**:
-     - Proses training bisa lama untuk dataset besar.
-     - Perlu tuning parameter seperti `C` dan `kernel` untuk hasil optimal.
+### Penjelasan parameter (default)
+Model menggunakan `DecisionTreeClassifier()` dari library `scikit-learn`, dengan parameter default:
+- `criterion='gini'`
+- `max_depth=None`
+- `min_samples_split=2`
+- `random_state=None`
+
+### Kelebihan
+- Mudah diinterpretasikan dan divisualisasikan.
+- Dapat menangani data kategorikal maupun numerik.
+- Tidak memerlukan normalisasi atau standardisasi data.
+
+### Kekurangan
+- Rentan terhadap overfitting, terutama jika pohon terlalu dalam.
+- Performa kurang stabil terhadap perubahan kecil pada data (high variance).
+
+---
+
+## Model 2: Random Forest
+
+### Penjelasan cara kerja algoritma
+Random Forest adalah metode ensemble yang membentuk banyak pohon keputusan (*decision trees*) dan menggabungkan hasilnya melalui *voting* mayoritas untuk klasifikasi. Setiap pohon dilatih dengan subset acak dari data dan fitur, sehingga mengurangi korelasi antar pohon dan meningkatkan generalisasi.
+
+### Penjelasan parameter (default)
+Model menggunakan `RandomForestClassifier()` dengan parameter default:
+- `n_estimators=100`
+- `criterion='gini'`
+- `max_depth=None`
+- `bootstrap=True`
+- `random_state=None`
+
+### Kelebihan
+- Lebih akurat dan stabil dibandingkan satu pohon keputusan.
+- Dapat menangani data yang hilang (*missing values*) dan fitur yang tidak linear.
+- Tidak mudah overfitting karena menggunakan rata-rata dari banyak pohon.
+
+### Kekurangan
+- Lebih kompleks dan memerlukan sumber daya komputasi lebih besar.
+- Interpretabilitas rendah dibandingkan decision tree tunggal.
+
+---
+
+## Model 3: K-Nearest Neighbors (KNN)
+
+### Penjelasan cara kerja algoritma
+KNN bekerja berdasarkan prinsip kedekatan. Data baru diklasifikasikan berdasarkan mayoritas kelas dari *k* tetangga terdekatnya, yang diukur menggunakan metrik jarak (misalnya *Euclidean*). Tidak ada proses pembelajaran eksplisit; pencarian dilakukan pada saat prediksi.
+
+### Penjelasan parameter (default)
+Model menggunakan `KNeighborsClassifier()` dengan parameter default:
+- `n_neighbors=5`
+- `weights='uniform'`
+- `algorithm='auto'`
+- `metric='minkowski'`, `p=2` (Euclidean distance)
+
+### Kelebihan
+- Sederhana dan efektif untuk dataset kecil.
+- Tidak memerlukan pelatihan eksplisit.
+- Tidak membuat asumsi terhadap distribusi data.
+
+### Kekurangan
+- Sensitif terhadap skala fitur (karena itu perlu standardisasi sebelumnya).
+- Kurang efisien untuk dataset besar karena proses pencarian jarak.
+- Rentan terhadap noise dan fitur tidak relevan.
+
+---
+
+## Model 4: Support Vector Machine (SVM)
+
+### Penjelasan cara kerja algoritma
+SVM mencari *hyperplane* terbaik yang memisahkan dua kelas dengan margin maksimal. Jika data tidak dapat dipisahkan secara linear, SVM menggunakan *kernel trick* (seperti RBF, polynomial) untuk mentransformasi data ke ruang berdimensi lebih tinggi agar dapat dipisahkan secara linear.
+
+### Penjelasan parameter (default)
+Model menggunakan `SVC()` dengan parameter default:
+- `C=1.0`
+- `kernel='rbf'`
+- `gamma='scale'`
+- `probability=False`
+- `random_state=None`
+
+### Kelebihan
+- Efektif untuk data berdimensi tinggi.
+- Dapat menangani klasifikasi non-linear dengan kernel.
+- Cocok untuk dataset dengan margin yang jelas antar kelas.
+
+### Kekurangan
+- Waktu komputasi tinggi pada dataset besar.
+- Perlu tuning parameter (`C`, `kernel`, `gamma`) untuk performa optimal.
+- Kurang efisien pada data yang sangat besar atau bervariasi.
+
 
 ---
 
@@ -282,81 +337,96 @@ Setelah seluruh model dievaluasi, akan dipilih **model dengan metrik performa te
 Pendekatan menggunakan beberapa algoritma memberikan gambaran yang lebih komprehensif terhadap kemampuan klasifikasi dataset penyakit jantung. Dengan mengevaluasi performa masing-masing model, kita dapat memilih model yang paling optimal dalam memberikan prediksi akurat terhadap kemungkinan seseorang menderita penyakit jantung.
 
 
-## Evaluation
+# Evaluation
 
-Pada proyek klasifikasi ini, digunakan beberapa metrik evaluasi untuk mengukur kinerja model machine learning, yaitu:
+## Metrik Evaluasi yang Digunakan
 
-- **Accuracy**: Mengukur seberapa banyak prediksi yang benar dari seluruh data. Formula:  
-  \[
-  \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}
-  \]
-  Di mana TP (True Positive), TN (True Negative), FP (False Positive), dan FN (False Negative).
+Untuk menilai performa model dalam mendeteksi penyakit jantung, digunakan empat metrik utama:
 
-- **Precision**: Mengukur ketepatan prediksi positif. Artinya, dari seluruh data yang diprediksi positif, berapa banyak yang benar-benar positif.  
-  \[
-  \text{Precision} = \frac{TP}{TP + FP}
-  \]
+- **Accuracy**  
+  Mengukur proporsi prediksi yang benar terhadap total prediksi. Relevan untuk memberikan gambaran umum kinerja model.  
+![image](https://github.com/user-attachments/assets/8adec300-f52a-442a-9890-b4e338696668)
 
-- **Recall**: Mengukur sensitivitas model dalam menangkap data positif. Artinya, dari seluruh data positif, berapa banyak yang berhasil ditangkap model.  
-  \[
-  \text{Recall} = \frac{TP}{TP + FN}
-  \]
-
-- **F1-score**: Merupakan harmonic mean dari precision dan recall, memberikan gambaran keseimbangan antara keduanya.  
-  \[
-  \text{F1-score} = 2 \times \frac{Precision \times Recall}{Precision + Recall}
-  \]
-
-### Hasil Evaluasi Model
-## Confusion Matrix
-
-### Confusion Matrix Decision Tree  
-![Confusion Matrix Decision Tree](https://github.com/user-attachments/assets/4a2f26f0-4867-4161-9ba0-43f946078425)
-
-### Confusion Matrix Random Forest  
-![Confusion Matrix Random Forest](https://github.com/user-attachments/assets/b3f9d527-cbe9-4438-b719-970eccfb7eee)
-
-### Confusion Matrix KNN  
-![Confusion Matrix KNN](https://github.com/user-attachments/assets/66ccfe62-3f9a-4cfa-8472-466dd85cb843)
-
-### Confusion Matrix SVM  
-![Confusion Matrix SVM](https://github.com/user-attachments/assets/7b2f29d9-fce0-4605-ad88-3e31a0f3d1bd)
+- **Precision (Class 1)**  
+  Mengukur seberapa banyak dari prediksi "positif" (indikasi penyakit) yang benar-benar positif. Penting untuk menghindari *false positive*, misalnya agar pasien sehat tidak didiagnosis keliru.  
+![image](https://github.com/user-attachments/assets/b3c83b36-05ec-4848-ae97-d88aaf91cd46)
 
 
-Empat algoritma telah digunakan untuk menyelesaikan tugas klasifikasi penyakit jantung:
+- **Recall (Class 1)**  
+  Menunjukkan seberapa banyak kasus penyakit jantung yang berhasil dikenali oleh model. Metrik ini sangat krusial karena menyangkut keberhasilan deteksi dini.  
+![image](https://github.com/user-attachments/assets/da78fc19-7f1e-4c76-943a-6f405d4e2434)
 
-| Model             | Accuracy | Precision (Class 1) | Recall (Class 1) | F1-score (Class 1) |
-|-------------------|----------|----------------------|------------------|--------------------|
-| Decision Tree     | 0.99     | 1.00                 | 0.97             | 0.99               |
-| Random Forest     | 0.99     | 1.00                 | 0.97             | 0.99               |
-| K-Nearest Neighbor| 0.84     | 0.84                 | 0.85             | 0.85               |
-| Support Vector Machine (SVM) | 0.88 | 0.85           | 0.91             | 0.88               |
 
-### Analisis Confusion Matrix
-- **Decision Tree & Random Forest** memiliki hasil yang sangat tinggi, dengan hanya 3 kesalahan klasifikasi pada kelas 1. Tidak ada kesalahan pada kelas 0.
-- **KNN** memiliki lebih banyak kesalahan dibanding dua model di atas, yaitu 17 kesalahan untuk kelas 0 dan 15 kesalahan untuk kelas 1.
-- **SVM** membuat 16 kesalahan pada kelas 0 dan 9 kesalahan pada kelas 1, namun menunjukkan keseimbangan precision-recall yang baik.
+- **F1-score (Class 1)**  
+  Merupakan rata-rata harmonik dari precision dan recall. Cocok untuk kondisi data yang tidak seimbang dan ketika kita ingin menjaga keseimbangan antara FP dan FN.  
+![image](https://github.com/user-attachments/assets/bf053b6c-5887-4c65-9dec-6312e3f72499)
 
-### Evaluasi Tambahan: Cross-Validation
-
-| Model             | Mean Accuracy | Standard Deviation |
-|-------------------|----------------|---------------------|
-| Decision Tree     | 1.0000         | 0.0000              |
-| Random Forest     | 1.0000         | 0.0000              |
-| KNN               | 0.8478         | 0.0221              |
-| SVM               | 0.9063         | 0.0217              |
-
-Hasil evaluasi menggunakan 5-Fold Cross-Validation menunjukkan bahwa:
-- **Decision Tree dan Random Forest** memiliki akurasi sempurna pada seluruh fold. Namun, ini menunjukkan potensi **overfitting**, karena model terlalu menyesuaikan diri dengan data pelatihan.
-- **KNN dan SVM** menunjukkan akurasi yang lebih realistis dan kemampuan generalisasi yang baik. Di antaranya, **SVM** memiliki **akurasi rata-rata tertinggi** (90,63%) dan variasi antar fold yang rendah, menunjukkan kestabilan model yang lebih baik di data nyata.
 
 ---
 
-### Kesimpulan Evaluasi
+## Hasil Evaluasi Model
 
-Meskipun model Decision Tree dan Random Forest menunjukkan akurasi tinggi pada data pelatihan, hasil cross-validation mengindikasikan potensi **overfitting**. Sebaliknya, model **Support Vector Machine (SVM)** menunjukkan keseimbangan terbaik antara akurasi dan kemampuan generalisasi berdasarkan metrik evaluasi dan validasi silang.
+### Confusion Matrix
 
-> **Dengan demikian, SVM dipilih sebagai model terbaik untuk kasus klasifikasi ini, karena memberikan performa yang tinggi dan stabil tanpa indikasi overfitting.**
+| Model | Confusion Matrix |
+|-------|------------------|
+| Decision Tree | ![Decision Tree](https://github.com/user-attachments/assets/4a2f26f0-4867-4161-9ba0-43f946078425) |
+| Random Forest | ![Random Forest](https://github.com/user-attachments/assets/b3f9d527-cbe9-4438-b719-970eccfb7eee) |
+| KNN | ![KNN](https://github.com/user-attachments/assets/66ccfe62-3f9a-4cfa-8472-466dd85cb843) |
+| SVM | ![SVM](https://github.com/user-attachments/assets/7b2f29d9-fce0-4605-ad88-3e31a0f3d1bd) |
+
+### Ringkasan Metrik Evaluasi
+
+| Model                      | Accuracy | Precision (Class 1) | Recall (Class 1) | F1-score (Class 1) |
+|----------------------------|----------|----------------------|------------------|--------------------|
+| Decision Tree              | 0.99     | 1.00                 | 0.97             | 0.99               |
+| Random Forest              | 0.99     | 1.00                 | 0.97             | 0.99               |
+| K-Nearest Neighbor (KNN)   | 0.84     | 0.84                 | 0.85             | 0.85               |
+| Support Vector Machine     | 0.88     | 0.85                 | 0.91             | 0.88               |
+
+### Cross-Validation (5-Fold)
+
+| Model           | Mean Accuracy | Standard Deviation |
+|-----------------|----------------|---------------------|
+| Decision Tree   | 1.0000         | 0.0000              |
+| Random Forest   | 1.0000         | 0.0000              |
+| KNN             | 0.8478         | 0.0221              |
+| SVM             | 0.9063         | 0.0217              |
+
+---
+
+## Analisis Hasil dan Pemilihan Model Terbaik
+
+- **Decision Tree dan Random Forest** mencapai akurasi sangat tinggi (99%) dan F1-score mendekati sempurna. Namun, hasil cross-validation menunjukkan **tidak ada variasi antar fold**, yang merupakan indikasi **overfitting** – model terlalu menyesuaikan diri dengan data pelatihan.
+- **KNN** memiliki akurasi rendah serta variasi antar fold yang cukup besar, menunjukkan performa tidak stabil.
+- **SVM** menampilkan performa yang seimbang antara akurasi tinggi (90.63% pada cross-validation), precision dan recall yang baik, serta variasi antar fold rendah. Ini menunjukkan **kestabilan dan kemampuan generalisasi yang lebih baik.**
+
+> **Model unggulan: Support Vector Machine (SVM)** dipilih sebagai model terbaik karena mencapai keseimbangan antara akurasi, kestabilan, dan kemampuan generalisasi, serta minim risiko overfitting.
+
+---
+
+## Keterkaitan dengan Business Understanding
+
+### Problem Statement 1: Deteksi Dini Penyakit Jantung
+
+Model SVM dengan recall 0.91 menunjukkan kemampuannya untuk mengenali 91% pasien yang benar-benar menderita penyakit jantung. Ini menjawab tantangan utama yaitu deteksi dini yang akurat, bahkan ketika gejala awal tidak tampak jelas.
+
+### Problem Statement 2: Alternatif Diagnosis Murah dan Terjangkau
+
+Dibandingkan metode medis mahal seperti CCTA, model machine learning berbasis data sederhana dapat diimplementasikan dengan biaya rendah di berbagai fasilitas kesehatan. SVM mampu memberikan solusi **efisien dan akurat**, terutama untuk daerah dengan akses terbatas terhadap peralatan medis mahal.
+
+### Problem Statement 3: Pemilihan Algoritma Optimal
+
+Dari empat algoritma yang diuji, **SVM** terbukti paling seimbang antara kinerja prediktif dan kemampuan generalisasi. Ini menjawab kebutuhan akan model yang **handal dan dapat digunakan dalam skenario nyata** tanpa risiko overfitting yang tinggi.
+
+---
+
+## Dampak terhadap Tujuan Proyek
+
+Dengan SVM sebagai model unggulan:
+- **Tujuan proyek untuk membangun sistem prediksi penyakit jantung yang efisien, murah, dan andal telah tercapai.**
+- Model dapat langsung diimplementasikan sebagai alat bantu diagnosis untuk meningkatkan kesadaran dini dan pengambilan keputusan klinis.
+- Evaluasi berbasis metrik dan validasi silang memberikan dasar yang kuat untuk **kepercayaan terhadap hasil prediksi**, yang penting bagi penerimaan model dalam konteks medis dan kebijakan kesehatan masyarakat.
 
 
 
