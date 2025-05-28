@@ -205,6 +205,37 @@ Contoh lima data teratas (4 pertama + 1 terakhir) dari dataset hasil preprocessi
 
 ---
 
+### 5. Pembagian Dataset (Train-Test Split)
+
+Setelah data selesai melalui proses seleksi fitur, encoding, dan normalisasi, langkah terakhir dalam tahap data preparation adalah membagi dataset menjadi data pelatihan dan data pengujian.
+
+Pembagian dilakukan dengan rasio:
+
+- **80%** data untuk pelatihan (**training set**)
+- **20%** data untuk pengujian (**test set**)
+
+Fungsi `train_test_split` dari `sklearn.model_selection` digunakan untuk membagi dataset secara acak namun terkontrol. Parameter `random_state` diatur untuk memastikan hasil pembagian yang konsisten saat proses diulang.
+
+Tujuan pembagian ini:
+- Melatih model menggunakan data training
+- Mengevaluasi performa model pada data yang belum pernah dilihat sebelumnya (data testing)
+- Mencegah overfitting dan memastikan generalisasi model terhadap data baru
+
+---
+
+### Kesimpulan
+
+Tahapan data preparation ini memastikan bahwa data yang digunakan dalam pelatihan model:
+
+- Telah disederhanakan melalui seleksi fitur
+- Dikodekan secara numerik menggunakan one-hot encoding
+- Dinormalisasi agar berada dalam skala yang sama
+- Dibagi dengan benar untuk pelatihan dan pengujian model
+
+Dengan data yang telah dipersiapkan dengan baik, proses pelatihan model dapat berjalan lebih optimal dan akurat.
+
+---
+
 # Modeling
 
 ## Model 1: Decision Tree
@@ -372,9 +403,9 @@ Untuk menilai performa model dalam mendeteksi penyakit jantung, digunakan empat 
 | Model                      | Accuracy | Precision (Class 1) | Recall (Class 1) | F1-score (Class 1) |
 |----------------------------|----------|----------------------|------------------|--------------------|
 | Decision Tree              | 0.99     | 1.00                 | 0.97             | 0.99               |
-| Random Forest              | 0.99     | 1.00                 | 0.97             | 0.99               |
-| K-Nearest Neighbor (KNN)   | 0.84     | 0.84                 | 0.85             | 0.85               |
-| Support Vector Machine     | 0.88     | 0.85                 | 0.91             | 0.88               |
+| Random Forest              | 1.00     | 1.00                 | 1.00             | 1.00               |
+| K-Nearest Neighbor (KNN)   | 0.81     | 0.83                 | 0.79             | 0.81               |
+| Support Vector Machine     | 0.90     | 0.88                 | 0.92             | 0.90               |
 
 ### Cross-Validation (5-Fold)
 
@@ -389,7 +420,7 @@ Untuk menilai performa model dalam mendeteksi penyakit jantung, digunakan empat 
 
 ## Analisis Hasil dan Pemilihan Model Terbaik
 
-- **Decision Tree dan Random Forest** mencapai akurasi sangat tinggi (99%) dan F1-score mendekati sempurna. Namun, hasil cross-validation menunjukkan **tidak ada variasi antar fold**, yang merupakan indikasi **overfitting** – model terlalu menyesuaikan diri dengan data pelatihan.
+- **Decision Tree dan Random Forest** mencapai akurasi sangat tinggi yaitu 99% dan 100% dan F1-score mendekati sempurna. Namun, hasil cross-validation menunjukkan **tidak ada variasi antar fold**, yang merupakan indikasi **overfitting** – model terlalu menyesuaikan diri dengan data pelatihan.
 - **KNN** memiliki akurasi rendah serta variasi antar fold yang cukup besar, menunjukkan performa tidak stabil.
 - **SVM** menampilkan performa yang seimbang antara akurasi tinggi (90.63% pada cross-validation), precision dan recall yang baik, serta variasi antar fold rendah. Ini menunjukkan **kestabilan dan kemampuan generalisasi yang lebih baik.**
 
@@ -401,7 +432,7 @@ Untuk menilai performa model dalam mendeteksi penyakit jantung, digunakan empat 
 
 ### Problem Statement 1: Deteksi Dini Penyakit Jantung
 
-Model SVM dengan recall 0.91 menunjukkan kemampuannya untuk mengenali 91% pasien yang benar-benar menderita penyakit jantung. Ini menjawab tantangan utama yaitu deteksi dini yang akurat, bahkan ketika gejala awal tidak tampak jelas.
+Model SVM dengan recall 0.92 menunjukkan kemampuannya untuk mengenali 92% pasien yang benar-benar menderita penyakit jantung. Ini menjawab tantangan utama yaitu deteksi dini yang akurat, bahkan ketika gejala awal tidak tampak jelas.
 
 ### Problem Statement 2: Alternatif Diagnosis Murah dan Terjangkau
 
