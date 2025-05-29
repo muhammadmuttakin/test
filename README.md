@@ -98,6 +98,13 @@ Berikut adalah penjelasan dari masing-masing fitur yang terdapat dalam dataset:
 
 ---
 
+
+## Data Preparation
+
+# Tahapan Data Preparation
+
+Tahapan data preparation bertujuan untuk mempersiapkan data sebelum masuk ke proses pemodelan. Langkah-langkah yang diterapkan dalam proyek ini meliputi:
+
 ## Eksplorasi dan Transformasi Data
 
 ### Eksplorasi Awal
@@ -109,21 +116,23 @@ Berikut adalah penjelasan dari masing-masing fitur yang terdapat dalam dataset:
 ### Penggantian Nama Kolom
 
 Untuk meningkatkan keterbacaan, beberapa nama kolom diubah ke Bahasa Indonesia, seperti:
-- `age` menjadi `usia`
-- `sex` menjadi `jenis_kelamin`
-- `cp` menjadi `tipe_nyeri_dada`
-- `trestbps` menjadi `tekanan_darah_istirahat`
-- `chol` menjadi `kolesterol`
-- `fbs` menjadi `gula_darah_puasa`
-- `restecg` menjadi `hasil_ekg_istirahat`
-- `thalach` menjadi `denyut_jantung_maks`
-- `exang` menjadi `angina_terinduksi_olahraga`
-- `oldpeak` menjadi `depresi_st`
-- `slope` menjadi `kemiringan_st`
-- `ca` menjadi `jumlah_pembuluh_berwarna`
-- `thal` menjadi `jenis_thalasemia`
+
+- `age` → `usia`
+- `sex` → `jenis_kelamin`
+- `cp` → `tipe_nyeri_dada`
+- `trestbps` → `tekanan_darah_istirahat`
+- `chol` → `kolesterol`
+- `fbs` → `gula_darah_puasa`
+- `restecg` → `hasil_ekg_istirahat`
+- `thalach` → `denyut_jantung_maks`
+- `exang` → `angina_terinduksi_olahraga`
+- `oldpeak` → `depresi_st`
+- `slope` → `kemiringan_st`
+- `ca` → `jumlah_pembuluh_berwarna`
+- `thal` → `jenis_thalasemia`
 
 ### Analisis Korelasi
+
 ![image](https://github.com/user-attachments/assets/c00a61d9-fd99-4366-a7b5-5b26ca83999b)
 
 Dilakukan analisis korelasi antara fitur dan variabel target. Hasilnya:
@@ -140,15 +149,19 @@ Dilakukan analisis korelasi antara fitur dan variabel target. Hasilnya:
 | Angina terinduksi olahraga | -0.44                  |
 | Depresi ST                 | -0.44                  |
 
-Fitur-fitur dengan korelasi tinggi dipilih untuk pelatihan model:  
-**tipe nyeri dada, angina terinduksi olahraga, depresi ST, jenis thalasemia, denyut jantung maksimum, jumlah pembuluh berwarna, dan usia.**
+**Fitur-fitur dengan korelasi tinggi dipilih untuk pelatihan model:**
+
+- Tipe nyeri dada
+- Angina terinduksi olahraga
+- Depresi ST
+- Jenis thalasemia
+- Denyut jantung maksimum
+- Jumlah pembuluh berwarna
+- Usia
 
 ---
-## Data Preparation
 
-Tahapan data preparation bertujuan untuk mempersiapkan data sebelum masuk ke proses pemodelan. Langkah-langkah yang diterapkan dalam proyek ini meliputi:
-
-### 1. Seleksi Fitur
+## 1. Seleksi Fitur
 
 Langkah awal adalah memilih subset dari fitur yang paling relevan terhadap prediksi penyakit jantung berdasarkan analisis korelasi sebelumnya. Fitur-fitur yang dipilih antara lain:
 
@@ -162,66 +175,81 @@ Langkah awal adalah memilih subset dari fitur yang paling relevan terhadap predi
 - `jenis_kelamin`
 - `target`
 
-Seleksi fitur ini penting untuk:
+**Manfaat seleksi fitur:**
+
 - Mengurangi kompleksitas model
 - Meningkatkan akurasi dan efisiensi algoritma
 - Menghindari fitur yang redundan atau kurang informatif
 
 ---
 
-### 2. One-Hot Encoding Fitur Kategorikal
+## 2. One-Hot Encoding Fitur Kategorikal
 
-Fitur kategorikal `tipe_nyeri_dada` dan `jenis_thalasemia` diubah menjadi representasi numerik menggunakan teknik **One-Hot Encoding**. Fungsi `pd.get_dummies()` digunakan untuk mengubah kategori menjadi kolom biner (0 atau 1), dan `drop_first=True` digunakan untuk menghindari multikolinearitas.
+Fitur kategorikal `tipe_nyeri_dada` dan `jenis_thalasemia` diubah menjadi representasi numerik menggunakan teknik **One-Hot Encoding**.  
 
-Setelah proses encoding, kolom hasil diubah ke tipe integer agar dapat digunakan dalam model pembelajaran mesin.
+- Digunakan `pd.get_dummies()` dengan `drop_first=True` untuk menghindari multikolinearitas.
+- Kolom hasil encoding diubah ke tipe integer.
 
-Tujuan tahap ini:
-- Mengonversi data kategorikal menjadi bentuk numerik yang bisa digunakan oleh algoritma ML
-- Memastikan model tidak mengasumsikan urutan atau hubungan antara kategori
+**Tujuan:**
 
----
-
-### 3. Normalisasi Fitur Numerik
-
-Fitur numerik seperti `usia`, `depresi_st`, dan `denyut_jantung_maks` dinormalisasi menggunakan **StandardScaler** dari `sklearn.preprocessing`. Normalisasi ini mengubah nilai-nilai menjadi distribusi dengan:
-
-- Rata-rata (mean) = 0
-- Standar deviasi = 1
-
-Proses ini penting untuk model berbasis jarak seperti **K-Nearest Neighbors (KNN)** dan **Support Vector Machine (SVM)**, agar:
-- Setiap fitur memiliki kontribusi yang seimbang dalam perhitungan jarak
-- Mempercepat proses pelatihan dan meningkatkan stabilitas model
+- Mengonversi data kategorikal menjadi numerik
+- Mencegah asumsi hubungan urutan antar kategori
 
 ---
 
-### 4. Finalisasi Data
+## 3. Normalisasi Fitur Numerik
+
+Fitur numerik seperti:
+
+- `usia`
+- `depresi_st`
+- `denyut_jantung_maks`
+
+...dinormalisasi menggunakan **StandardScaler** dari `sklearn.preprocessing`.
+
+**Hasil normalisasi:**
+
+- Mean = 0
+- Standard deviation = 1
+
+**Alasan normalisasi:**
+
+- Untuk algoritma berbasis jarak seperti **KNN** dan **SVM**
+- Menyamaratakan kontribusi fitur
+- Meningkatkan stabilitas dan efisiensi model
+
+---
+
+## 4. Finalisasi Data
 
 Setelah semua tahap selesai:
-- Dataset akhir (`df_new`) terdiri dari fitur-fitur numerik yang sudah dinormalisasi
-- Fitur kategorikal yang sudah di-encode ke dalam bentuk biner
-- Kolom target (`target`) tetap dipertahankan sebagai label
 
-Contoh lima data teratas (4 pertama + 1 terakhir) dari dataset hasil preprocessing ditampilkan menggunakan `pd.concat()` untuk memastikan struktur data akhir sudah sesuai.
+- Dataset akhir (`df_new`) terdiri dari:
+  - Fitur numerik yang sudah dinormalisasi
+  - Fitur kategorikal hasil encoding
+  - Kolom target (`target`) sebagai label
+
+Contoh lima data teratas (4 pertama + 1 terakhir) ditampilkan menggunakan `pd.concat()` untuk verifikasi struktur akhir.
+
+---
+
+## 5. Pembagian Dataset (Train-Test Split)
+
+Dataset dibagi menjadi:
+
+- **80%** data pelatihan (**training set**)
+- **20%** data pengujian (**test set**)
+
+Menggunakan `train_test_split` dari `sklearn.model_selection` dengan `random_state` untuk hasil yang konsisten.
+
+**Tujuan:**
+
+- Melatih model pada data yang tersedia
+- Menguji performa model pada data baru
+- Mencegah overfitting dan meningkatkan generalisasi
 
 ---
 
-### 5. Pembagian Dataset (Train-Test Split)
-
-Setelah data selesai melalui proses seleksi fitur, encoding, dan normalisasi, langkah terakhir dalam tahap data preparation adalah membagi dataset menjadi data pelatihan dan data pengujian.
-
-Pembagian dilakukan dengan rasio:
-
-- **80%** data untuk pelatihan (**training set**)
-- **20%** data untuk pengujian (**test set**)
-
-Fungsi `train_test_split` dari `sklearn.model_selection` digunakan untuk membagi dataset secara acak namun terkontrol. Parameter `random_state` diatur untuk memastikan hasil pembagian yang konsisten saat proses diulang.
-
-Tujuan pembagian ini:
-- Melatih model menggunakan data training
-- Mengevaluasi performa model pada data yang belum pernah dilihat sebelumnya (data testing)
-- Mencegah overfitting dan memastikan generalisasi model terhadap data baru
-
----
 
 ### Kesimpulan
 
