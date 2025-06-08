@@ -3,13 +3,19 @@
 ## Domain Proyek
 
 Dalam era digital yang terus berkembang, jumlah buku yang tersedia secara daring meningkat secara signifikan setiap tahunnya. Hal ini diperkuat oleh data dari International Publishers Association (IPA, 2022) yang mencatat pertumbuhan signifikan dalam penerbitan buku, baik dalam format cetak maupun digital. Pertumbuhan ini memberikan tantangan tersendiri bagi pembaca, yaitu kesulitan dalam menemukan buku yang sesuai dengan minat, kebutuhan, atau preferensi mereka secara efisien dan tepat sasaran.
+
 Untuk menjawab tantangan tersebut, sistem rekomendasi buku menjadi salah satu solusi yang semakin relevan dan penting. Sistem ini bekerja dengan menganalisis data pengguna dan menawarkan rekomendasi bacaan yang dipersonalisasi. Platform besar seperti Amazon dan Goodreads telah lama mengandalkan sistem rekomendasi untuk meningkatkan pengalaman pengguna dan mendorong keterlibatan yang lebih besar (Zhang et al., 2021). Dalam konteks literasi digital dan pembelajaran, sistem ini juga terbukti mampu meningkatkan minat baca dan akses terhadap sumber informasi yang lebih luas (Lee & Chen, 2020).
-Berbagai pendekatan dalam pengembangan sistem rekomendasi telah diperkenalkan, mulai dari content-based filtering yang menganalisis karakteristik buku, hingga collaborative filtering yang memanfaatkan perilaku pengguna lain sebagai dasar rekomendasi. Pendekatan hibrida yang menggabungkan keduanya juga menunjukkan hasil yang lebih akurat dalam berbagai studi terkini (Khan et al., 2021). Dengan berkembangnya teknologi machine learning dan kecerdasan buatan, sistem rekomendasi kini mampu belajar dan menyesuaikan diri dengan pola dan preferensi pengguna yang kompleks.
+
+Berbagai pendekatan dalam pengembangan sistem rekomendasi telah diperkenalkan, mulai dari content-based filtering yang menganalisis karakteristik buku, hingga collaborative filtering yang memanfaatkan perilaku pengguna lain sebagai dasar rekomendasi. Pendekatan hibrida yang menggabungkan keduanya juga menunjukkan hasil yang lebih akurat dalam berbagai studi terkini (Khan et al., 2021). Dengan berkembangnya teknologi machine learning dan kecerdasan buatan, sistem rekomendasi kini mampu belajar dan menyesuaikan 
+diri dengan pola dan preferensi pengguna yang kompleks.
+
 Oleh karena itu, proyek ini bertujuan untuk merancang dan mengimplementasikan sistem rekomendasi buku yang adaptif dan cerdas, guna membantu pengguna dalam menemukan buku yang relevan secara efisien. Pengembangan sistem ini diharapkan tidak hanya meningkatkan pengalaman pengguna, tetapi juga berkontribusi pada peningkatan budaya literasi di era digital.
 
 ## Business Understanding
 
-Dalam era digital yang dipenuhi oleh limpahan informasi, pengguna dihadapkan pada tantangan dalam memilih buku yang sesuai dengan preferensi mereka. Banyaknya pilihan buku di platform digital membuat proses pencarian menjadi tidak efisien dan terkadang membuat pengguna melewatkan buku yang sebenarnya relevan atau menarik. Selain itu, pengguna baru yang belum memiliki riwayat interaksi di platform akan kesulitan mendapatkan rekomendasi yang sesuai karena tidak adanya data awal yang bisa digunakan sistem.
+Dalam era digital yang dipenuhi oleh limpahan informasi, pengguna dihadapkan pada tantangan dalam memilih buku yang sesuai dengan preferensi mereka. Banyaknya pilihan buku di platform digital membuat proses pencarian menjadi tidak efisien dan terkadang membuat pengguna melewatkan buku yang sebenarnya relevan atau menarik. Selain itu, pengguna 
+baru yang belum memiliki riwayat interaksi di platform akan kesulitan mendapatkan rekomendasi yang sesuai karena tidak adanya data awal yang bisa digunakan sistem.
+
 Penyedia layanan digital seperti toko buku online, perpustakaan digital, dan aplikasi pembaca membutuhkan sistem yang mampu merekomendasikan buku secara otomatis, akurat, dan personal. Untuk itu, diperlukan pendekatan sistematis untuk membangun sistem rekomendasi buku yang mampu mengatasi keterbatasan dalam pencarian manual serta meningkatkan pengalaman pengguna secara keseluruhan.
 
 ---
