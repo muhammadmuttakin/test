@@ -268,13 +268,6 @@ Model ini menggunakan pendekatan Collaborative Filtering berbasis pengguna (user
 - Rentan terhadap masalah cold-start, khususnya bagi pengguna baru yang belum memberikan rating.
 - Performa menurun jika data terlalu sparse (banyak nilai kosong).
 
-#### 📈 Hasil Evaluasi
-Model ini dievaluasi menggunakan metrik RMSE (Root Mean Squared Error) dan MAE (Mean Absolute Error):
-- **RMSE**: 0.3542
-- **MAE**: 0.2463
-
-Nilai RMSE dan MAE yang rendah menunjukkan bahwa prediksi rating dari model cukup akurat.
-
 ---
 
 ### 2. 📚 Content-Based Filtering
@@ -298,22 +291,34 @@ Model ini merekomendasikan buku berdasarkan kemiripan isi (konten), yaitu deskri
 
 ---
 
-### 🎯 Pemilihan Model Terbaik
+## 🔎 Result (Hasil Rekomendasi dan Evaluasi Model)
 
-Dalam proyek ini digunakan dua pendekatan:
-- **User-Based Collaborative Filtering**
-- **Content-Based Filtering**
+### User-Based Recommendations for user 3835:
+Berikut adalah daftar rekomendasi buku untuk pengguna dengan ID 3835 berdasarkan User-Based Collaborative Filtering:
 
-Model terbaik dipilih berdasarkan:
-- Kualitas rekomendasi (akurasi prediksi rating)
-- Kemampuan memberikan rekomendasi yang relevan secara personal
-- Evaluasi kuantitatif (RMSE dan MAE)
+1. **To Kill a Mockingbird** (predicted rating: 4.07)  
+2. **Harry Potter and the Philosopher’s Stone (Harry Potter, #1)** (predicted rating: 4.07)  
+3. **Pride and Prejudice** (predicted rating: 4.07)  
+4. **The Diary of a Young Girl** (predicted rating: 4.07)  
+5. **Animal Farm** (predicted rating: 4.07)  
 
-➡️ **User-Based Collaborative Filtering dipilih sebagai model utama** karena:
-- Memberikan prediksi rating yang lebih akurat berdasarkan evaluasi (RMSE & MAE).
-- Lebih relevan secara personal karena mempertimbangkan preferensi pengguna lain yang mirip.
+Model memprediksi rating pengguna terhadap buku-buku tersebut cukup tinggi, menandakan potensi minat yang besar.
 
 ---
+
+### Content-Based Recommendations for 'To Kill a Mockingbird':
+Rekomendasi berdasarkan kemiripan isi buku *To Kill a Mockingbird* menggunakan Content-Based Filtering menghasilkan daftar buku yang mirip secara konten dan tema:
+
+| Book                              | Author               | Genres                                       | Avg Rating |
+|----------------------------------|----------------------|----------------------------------------------|------------|
+| Go Set a Watchman                | Harper Lee           | Fiction, Historical Fiction, Classics, ...  | 3.31       |
+| Harper Lee's To Kill a Mockingbird | Harold Bloom       | Classics, Fiction, Historical Fiction, ...  | 4.43       |
+| The Chronicles of Prydain        | Lloyd Alexander      | Fantasy, Young Adult, Fiction, Children     | 4.42       |
+| Story of a Soul                  | Thérèse of Lisieux   | Catholic, Religion, Biography, Nonfiction   | 4.40       |
+| Malgudi Days                    | R.K. Narayan         | Fiction, Short Stories, India, Classics      | 4.21       |
+
+---
+
 
 ## Evaluasi Model Sistem Rekomendasi
 
