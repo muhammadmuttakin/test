@@ -76,6 +76,9 @@ Dataset ini sangat relevan untuk membangun sistem rekomendasi karena memuat data
 
 Berikut adalah penjelasan setiap fitur atau kolom dalam dataset `goodreads_data.csv`:
 
+- **Unnamed: 0**  
+  Merupakan indeks baris yang secara otomatis tersimpan saat dataset diekspor ke CSV dari pandas dengan parameter `index=True`. Kolom ini berisi urutan angka (biasanya dari 0 atau 1 ke atas) dan tidak membawa informasi penting terkait data buku. Urutan ini nantinya akan digunakan sebagai user_id.
+
 - **Book**  
   Nama buku. Dalam beberapa kasus, nama ini juga mencakup informasi tentang seri buku di dalam tanda kurung. Informasi ini dapat diekstrak lebih lanjut untuk analisis seri buku.
 
@@ -96,6 +99,7 @@ Berikut adalah penjelasan setiap fitur atau kolom dalam dataset `goodreads_data.
 
 - **URL**  
   Tautan menuju halaman detail buku di Goodreads. Meskipun tidak digunakan dalam proses pemodelan, URL ini berguna untuk validasi manual dan penyajian hasil.
+
 
 # Exploratory Data Analysis (EDA)
 
@@ -188,9 +192,30 @@ Setelah menghapus baris dengan nilai kosong di kolom `Description`, jumlah baris
 - Genre dan deskripsi memberikan informasi penting untuk digunakan dalam pendekatan **content-based filtering**.
 - Variasi genre mendukung pengembangan sistem rekomendasi yang adaptif terhadap berbagai minat pembaca.
 
-## Data Preparation
+## 📦 Data Preparation
+
+Tahapan persiapan data dilakukan untuk memastikan bahwa data bersih, relevan, dan siap digunakan dalam proses pemodelan. Beberapa langkah tambahan yang penting namun belum dijelaskan secara eksplisit sebelumnya juga ditambahkan di sini.
+
+---
+
+### 0. Pengolahan Awal Dataset
+
+- **Menghapus Nilai Kosong**  
+  Baris dengan nilai kosong, khususnya pada kolom deskripsi, dihapus menggunakan `dropna()` untuk menjaga kualitas data input, terutama pada model berbasis konten.
+
+- **Mengganti Nama Kolom `Unnamed: 0`**  
+  Kolom ini merupakan indeks lama yang tersimpan saat ekspor dari pandas. Diubah namanya menjadi `'userid'` agar lebih deskriptif dan memudahkan dalam pengolahan selanjutnya.
+
+- **Persiapan Data untuk Surprise**  
+  Data untuk model Collaborative Filtering disiapkan menggunakan `Reader` dan `Dataset.load_from_df` dari library Surprise, yang membutuhkan format khusus: `(user, item, rating)`.
+
+- **Split Data Latih dan Uji**  
+  Data rating dibagi menjadi data latih dan data uji menggunakan `train_test_split` dari Surprise untuk keperluan evaluasi model.
+
+---
 
 ### 1. Inisialisasi Stopwords dan Stemming
+
 Langkah awal dilakukan dengan menyiapkan daftar stopwords dan alat untuk stemming:
 
 - **Stopwords**: Menggunakan daftar stopwords Bahasa Inggris dari `nltk`, serta menambahkan stopwords khusus seperti `book`, `author`, `read`, dll., karena kata-kata ini umum tetapi tidak memberikan informasi yang bermakna dalam konteks deskripsi buku.
@@ -199,6 +224,7 @@ Langkah awal dilakukan dengan menyiapkan daftar stopwords dan alat untuk stemmin
 ---
 
 ### 2. Preprocessing Teks
+
 Proses pembersihan teks dilakukan melalui beberapa tahapan berikut:
 
 1. **Lowercasing**: Mengubah semua huruf menjadi huruf kecil.
@@ -213,24 +239,28 @@ Proses pembersihan teks dilakukan melalui beberapa tahapan berikut:
 ---
 
 ### 3. Pembentukan dan Visualisasi N-Gram
+
 Setelah data dibersihkan, dilakukan pembentukan **n-gram** menggunakan `TfidfVectorizer`:
 
 - **Bigram** (`ngram_range=(2,2)`): Kombinasi dua kata berurutan.
 - **Trigram** (`ngram_range=(3,3)`): Kombinasi tiga kata berurutan.
-![image](https://github.com/user-attachments/assets/4fb29dad-dabb-4749-a663-9e0f33cbe4c4)
+
+![Bigram](https://github.com/user-attachments/assets/4fb29dad-dabb-4749-a663-9e0f33cbe4c4)
 
 Hasil bigram dan trigram dengan skor tertinggi divisualisasikan menggunakan `barplot`. Beberapa temuan populer:
 
 - **Bigram**: `new york`, `york time`, `best friend`
 - **Trigram**: `new york time`, `york time bestsel`, `altern cover edit`
-![image](https://github.com/user-attachments/assets/6b86cc63-3e39-40ad-adcb-34f457048a52)
+
+![Trigram](https://github.com/user-attachments/assets/6b86cc63-3e39-40ad-adcb-34f457048a52)
 
 > Visualisasi ini membantu mengidentifikasi frasa penting yang sering muncul dalam deskripsi buku.
 
 ---
 
 ### 4. Penanganan Duplikat Rating
-Data rating diperiksa untuk mendeteksi pasangan `user_id` dan `Book` yang duplikat:
+
+Data rating diperiksa untuk mendeteksi pasangan `userid` dan `Book` yang duplikat:
 
 - Jika ditemukan duplikat, rating untuk pasangan tersebut dirata-ratakan menggunakan `groupby` dan `mean`.
 - Hal ini penting untuk menjaga kualitas data sebelum digunakan dalam model rekomendasi.
@@ -238,11 +268,13 @@ Data rating diperiksa untuk mendeteksi pasangan `user_id` dan `Book` yang duplik
 ---
 
 ### 5. Word Cloud
+
 Untuk memberikan gambaran umum tentang kata-kata yang sering digunakan dalam deskripsi, dibuat **word cloud** dari seluruh `cleaned_description`.
 
 - Kata-kata seperti: `life`, `love`, `world`, `power`, `make`, dan `one` menjadi dominan.
 - Ini menunjukkan tema umum yang muncul dalam koleksi buku.
-![image](https://github.com/user-attachments/assets/d7f22986-2d23-4056-b716-ca4b213afac2)
+
+![Word Cloud](https://github.com/user-attachments/assets/d7f22986-2d23-4056-b716-ca4b213afac2)
 
 
 ## 📊 Modeling
@@ -270,27 +302,6 @@ Model ini menggunakan pendekatan Collaborative Filtering berbasis pengguna (user
 
 ---
 
-### 2. 📚 Content-Based Filtering
-
-#### 📌 Deskripsi
-Model ini merekomendasikan buku berdasarkan kemiripan isi (konten), yaitu deskripsi buku. Digunakan teknik TF-IDF untuk merepresentasikan teks, dan cosine similarity untuk mengukur kedekatan antar deskripsi.
-
-#### ⚙️ Proses Singkat
-- Membersihkan dan memproses teks deskripsi buku.
-- Mengubah deskripsi menjadi vektor numerik menggunakan TF-IDF.
-- Menghitung kemiripan antar buku menggunakan cosine similarity.
-- Buku yang paling mirip dengan buku yang pernah disukai pengguna akan direkomendasikan.
-
-#### ✅ Kelebihan
-- Tidak tergantung pada interaksi pengguna lain.
-- Cocok untuk mengatasi cold-start item (buku baru).
-
-#### ❌ Kekurangan
-- Terbatas pada fitur yang tersedia di metadata (deskripsi).
-- Kurang personal karena hanya berdasarkan konten, bukan perilaku pengguna.
-
----
-
 ## 🔎 Result (Hasil Rekomendasi dan Evaluasi Model)
 
 ### User-Based Recommendations for user 3835:
@@ -305,20 +316,6 @@ Berikut adalah daftar rekomendasi buku untuk pengguna dengan ID 3835 berdasarkan
 Model memprediksi rating pengguna terhadap buku-buku tersebut cukup tinggi, menandakan potensi minat yang besar.
 
 ---
-
-### Content-Based Recommendations for 'To Kill a Mockingbird':
-Rekomendasi berdasarkan kemiripan isi buku *To Kill a Mockingbird* menggunakan Content-Based Filtering menghasilkan daftar buku yang mirip secara konten dan tema:
-
-| Book                              | Author               | Genres                                       | Avg Rating |
-|----------------------------------|----------------------|----------------------------------------------|------------|
-| Go Set a Watchman                | Harper Lee           | Fiction, Historical Fiction, Classics, ...  | 3.31       |
-| Harper Lee's To Kill a Mockingbird | Harold Bloom       | Classics, Fiction, Historical Fiction, ...  | 4.43       |
-| The Chronicles of Prydain        | Lloyd Alexander      | Fantasy, Young Adult, Fiction, Children     | 4.42       |
-| Story of a Soul                  | Thérèse of Lisieux   | Catholic, Religion, Biography, Nonfiction   | 4.40       |
-| Malgudi Days                    | R.K. Narayan         | Fiction, Short Stories, India, Classics      | 4.21       |
-
----
-
 
 ## Evaluasi Model Sistem Rekomendasi
 
@@ -337,36 +334,20 @@ Nilai RMSE dan MAE yang rendah menunjukkan model User-Based Collaborative Filter
 
 ---
 
-### Evaluasi Content-Based Filtering (Secara Kualitatif)
-
-Pada Content-Based Filtering, evaluasi dilakukan secara kualitatif dengan meninjau hasil rekomendasi untuk buku *"To Kill a Mockingbird"*. Rekomendasi yang diberikan menampilkan buku-buku dengan kemiripan tema dan genre sebagai berikut:
-
-| Buku                                             | Penulis            | Genre                                            | Rating Rata-rata |
-|--------------------------------------------------|--------------------|-------------------------------------------------|------------------|
-| Go Set a Watchman                                 | Harper Lee         | Fiction, Historical Fiction, Classics            | 3.31             |
-| Harper Lee's To Kill a Mockingbird                | Harold Bloom       | Classics, Fiction, Historical Fiction            | 4.43             |
-| The Chronicles of Prydain                         | Lloyd Alexander    | Fantasy, Young Adult, Fiction                     | 4.42             |
-| Story of a Soul: The Autobiography of St. Thérèse| Thérèse of Lisieux | Catholic, Religion, Biography                      | 4.40             |
-| Malgudi Days                                      | R.K. Narayan       | Fiction, Short Stories, India, Classics           | 4.21             |
-
-**Analisis Kualitatif:**  
-- Buku-buku rekomendasi memiliki genre dan tema yang relevan dengan buku input, seperti *Fiction*, *Classics*, dan *Historical Fiction*, yang menunjukkan konsistensi rekomendasi.
-- Rekomendasi juga menunjukkan variasi yang menarik dengan buku dari genre berbeda yang memiliki rating tinggi, memberikan pilihan yang beragam bagi pengguna.
-- Sistem mampu memberikan rekomendasi yang logis dan dipersonalisasi berdasarkan kemiripan deskripsi buku, meskipun tanpa metrik kuantitatif formal.
-
----
-
 ### Kesimpulan Evaluasi
 
 - **Collaborative Filtering** unggul dalam memberikan rekomendasi berdasarkan pola rating pengguna lain yang mirip, dengan bukti numerik akurasi prediksi yang baik melalui RMSE dan MAE.
-- **Content-Based Filtering** memberikan rekomendasi yang relevan dan bervariasi berdasarkan konten dan genre buku, yang dievaluasi secara kualitatif dan cocok untuk pengguna dengan preferensi spesifik.
-- Kombinasi kedua metode dapat meningkatkan kualitas rekomendasi, terutama untuk kasus pengguna baru atau data sparsity.
+- Kombinasi metode berbasis pengguna dan pendekatan lainnya dapat meningkatkan kualitas rekomendasi, terutama untuk kasus pengguna baru atau data sparsity.
+
 
 
 
 ### References:
 
 International Publishers Association. (2022). Global publishing statistics. https://www.internationalpublishers.org
+
 Khan, M. A., Nazir, M., & Bashir, A. K. (2021). A hybrid recommendation system for books using machine learning. Expert Systems with Applications, 168, 114481. https://doi.org/10.1016/j.eswa.2020.114481 
+
 Lee, C.-Y., & Chen, Y.-L. (2020). Personalized book recommendation using a deep learning approach. Information Processing & Management, 57(5), 102321. https://doi.org/10.1016/j.ipm.2020.102321
+
 Zhang, Y., Zhao, H., & Zheng, Y. (2021). A survey on recommendation systems in the book domain. Artificial Intelligence Review, 54, 243–273. https://doi.org/10.1007/s10462-020-09827-9
