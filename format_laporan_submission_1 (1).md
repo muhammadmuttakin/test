@@ -203,27 +203,27 @@ Tahapan persiapan data dilakukan untuk memastikan bahwa data bersih, relevan, da
 - **Menghapus Nilai Kosong**  
   Baris dengan nilai kosong, khususnya pada kolom deskripsi, dihapus menggunakan `dropna()` untuk menjaga kualitas data input, terutama pada model berbasis konten.
 
-- **Mengganti Nama Kolom `Unnamed: 0`**  
+- **Mengganti Nama Kolom Unnamed: 0**  
   Kolom ini merupakan indeks lama yang tersimpan saat ekspor dari pandas. Diubah namanya menjadi `'userid'` agar lebih deskriptif dan memudahkan dalam pengolahan selanjutnya.
-
-- **Persiapan Data untuk Surprise**  
-  Data untuk model Collaborative Filtering disiapkan menggunakan `Reader` dan `Dataset.load_from_df` dari library Surprise, yang membutuhkan format khusus: `(user, item, rating)`.
-
-- **Split Data Latih dan Uji**  
-  Data rating dibagi menjadi data latih dan data uji menggunakan `train_test_split` dari Surprise untuk keperluan evaluasi model.
 
 ---
 
-### 1. Inisialisasi Stopwords dan Stemming
+### 1. Handling Missing Values
+
+Data dengan nilai kosong pada kolom penting seperti `description`, `userid`, atau `rating` dihapus untuk memastikan kualitas data tetap terjaga.
+
+---
+
+### 2. Inisialisasi Stopwords dan Stemming
 
 Langkah awal dilakukan dengan menyiapkan daftar stopwords dan alat untuk stemming:
 
-- **Stopwords**: Menggunakan daftar stopwords Bahasa Inggris dari `nltk`, serta menambahkan stopwords khusus seperti `book`, `author`, `read`, dll., karena kata-kata ini umum tetapi tidak memberikan informasi yang bermakna dalam konteks deskripsi buku.
-- **Stemming**: Digunakan `PorterStemmer` dari `nltk` untuk mengubah kata ke bentuk dasarnya (stem) guna mengurangi variasi kata.
+- **Stopwords**: Menggunakan daftar stopwords Bahasa Inggris dari NLTK, serta menambahkan stopwords khusus seperti *book*, *author*, *read*, dll.
+- **Stemming**: Menggunakan `PorterStemmer` dari NLTK untuk mengubah kata ke bentuk dasarnya.
 
 ---
 
-### 2. Preprocessing Teks
+### 3. Preprocessing Teks
 
 Proses pembersihan teks dilakukan melalui beberapa tahapan berikut:
 
@@ -238,7 +238,7 @@ Proses pembersihan teks dilakukan melalui beberapa tahapan berikut:
 
 ---
 
-### 3. Pembentukan dan Visualisasi N-Gram
+### 4. Pembentukan dan Visualisasi N-Gram
 
 Setelah data dibersihkan, dilakukan pembentukan **n-gram** menggunakan `TfidfVectorizer`:
 
@@ -247,10 +247,10 @@ Setelah data dibersihkan, dilakukan pembentukan **n-gram** menggunakan `TfidfVec
 
 ![Bigram](https://github.com/user-attachments/assets/4fb29dad-dabb-4749-a663-9e0f33cbe4c4)
 
-Hasil bigram dan trigram dengan skor tertinggi divisualisasikan menggunakan `barplot`. Beberapa temuan populer:
+Hasil bigram dan trigram dengan skor tertinggi divisualisasikan menggunakan barplot. Beberapa temuan populer:
 
-- **Bigram**: `new york`, `york time`, `best friend`
-- **Trigram**: `new york time`, `york time bestsel`, `altern cover edit`
+- **Bigram**: *new york*, *york time*, *best friend*
+- **Trigram**: *new york time*, *york time bestsel*, *altern cover edit*
 
 ![Trigram](https://github.com/user-attachments/assets/6b86cc63-3e39-40ad-adcb-34f457048a52)
 
@@ -258,7 +258,7 @@ Hasil bigram dan trigram dengan skor tertinggi divisualisasikan menggunakan `bar
 
 ---
 
-### 4. Penanganan Duplikat Rating
+### 5. Penanganan Duplikat Rating
 
 Data rating diperiksa untuk mendeteksi pasangan `userid` dan `Book` yang duplikat:
 
@@ -267,14 +267,26 @@ Data rating diperiksa untuk mendeteksi pasangan `userid` dan `Book` yang duplika
 
 ---
 
-### 5. Word Cloud
+### 6. Word Cloud
 
 Untuk memberikan gambaran umum tentang kata-kata yang sering digunakan dalam deskripsi, dibuat **word cloud** dari seluruh `cleaned_description`.
 
-- Kata-kata seperti: `life`, `love`, `world`, `power`, `make`, dan `one` menjadi dominan.
+- Kata-kata seperti: *life*, *love*, *world*, *power*, *make*, dan *one* menjadi dominan.
 - Ini menunjukkan tema umum yang muncul dalam koleksi buku.
 
 ![Word Cloud](https://github.com/user-attachments/assets/d7f22986-2d23-4056-b716-ca4b213afac2)
+
+---
+
+### 7. Persiapan Data untuk Surprise
+
+Data untuk model Collaborative Filtering disiapkan menggunakan `Reader` dan `Dataset.load_from_df` dari library Surprise, yang membutuhkan format khusus: `(user, item, rating)`.
+
+---
+
+### 8. Split Data Latih dan Uji
+
+Data rating dibagi menjadi data latih dan data uji menggunakan `train_test_split` dari Surprise untuk keperluan evaluasi model.
 
 
 ## 📊 Modeling
@@ -302,9 +314,9 @@ Model ini menggunakan pendekatan Collaborative Filtering berbasis pengguna (user
 
 ---
 
-## 🔎 Result (Hasil Rekomendasi dan Evaluasi Model)
+### 🔎 Result (Hasil Rekomendasi dan Evaluasi Model)
 
-### User-Based Recommendations for user 3835:
+#### User-Based Recommendations for user 3835:
 Berikut adalah daftar rekomendasi buku untuk pengguna dengan ID 3835 berdasarkan User-Based Collaborative Filtering:
 
 1. **To Kill a Mockingbird** (predicted rating: 4.07)  
